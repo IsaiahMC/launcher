@@ -3,7 +3,6 @@ package launcher;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Locale;

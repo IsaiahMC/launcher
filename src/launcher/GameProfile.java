@@ -14,6 +14,8 @@ import launcher.api.AssetDownloader;
 import launcher.api.GameLaunchAPI;
 import launcher.api.GameProfileData;
 import launcher.api.LibraryData;
+import launcher.api.Natives;
+import launcher.api.VersionData;
 
 public class GameProfile {
 
@@ -76,8 +78,10 @@ public class GameProfile {
         libsFile.mkdir();
         String libPath = libsFile.getAbsolutePath() + File.separator;
         String libs = "";
-        String natives = "";
-  
+        //String natives = "";
+
+        Natives.unzipNatives(data.libraries);
+
         for (LibraryData lib : data.libraries) {
             if (null == lib.path) {
                 String lname = lib.name.split(":")[0].replace(".", File.separator);
@@ -87,16 +91,16 @@ public class GameProfile {
             }
             libs += libPath + lib.path + ";";
         }
+        File natives = null;
         if (null != data.inheritsFrom) {
-            for (LibraryData lib : GameLaunchAPI.versionData.get(data.inheritsFrom).getLibraries()) {
-                if (null != lib && lib.path.contains("native"))
-                    natives += libPath + lib.path.replace("/", File.separator) + ";";
+            VersionData vdat = GameLaunchAPI.versionData.get(data.inheritsFrom);
+            natives = vdat.unzipNatives();
+            for (LibraryData lib : vdat.getLibraries())
                 if (null != lib)
                     libs += libPath + lib.path.replace("/", File.separator) + ";";
-            }
         }
         args.add("-Dminecraft.client.jar=" + getPathToGameJar());
-        args.add("-Djava.library.path=" + "C:\\Users\\OWNER\\AppData\\Roaming\\.minecraft\\bin\\1d27-2b18-9c8e-708d"); // TODO extract natives
+        args.add("-Djava.library.path=" + natives.getAbsolutePath());
         args.add("-cp");
         args.add(libs + ";" + libsFile.getAbsolutePath() + ";" + getPathToGameJar());
 
@@ -106,6 +110,7 @@ public class GameProfile {
         args.add(Auth.getName());
         args.add("--accessToken");
         args.add(Auth.getToken());
+        System.out.println(Auth.getToken());
         args.add("--username");
         args.add(Auth.getName());
         args.add("--gameDir");

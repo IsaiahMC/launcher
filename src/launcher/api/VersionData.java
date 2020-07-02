@@ -1,15 +1,25 @@
 package launcher.api;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilterInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import launcher.Main;
 import launcher.Utils;
 
 public class VersionData {
@@ -48,6 +58,72 @@ public class VersionData {
             });
         }
         return libraries;
+    }
+
+    public File unzipNatives() {
+        File dir = new File(new File(Main.DIR, "bin"), "natives-" + id);
+        dir.mkdirs();
+
+        for (LibraryData library : getLibraries()) {
+            if (library.path.contains("native")) {
+                System.out.println("Natives: " + library.path);
+                try {
+                    unzipNative(dir, library.url);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return dir;
+    }
+
+    public void unzipNative(File dir, String rawurl) throws IOException {
+        URL url = new URL(rawurl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        InputStream in = connection.getInputStream();
+        ZipInputStream zipIn = new ZipInputStream(in);
+        ZipEntry entry = zipIn.getNextEntry();
+
+        while(entry != null) {
+            System.out.println(entry.getName());
+            if (!entry.isDirectory()) {
+                saveEntry(dir, entry, new FilterInputStream(zipIn) {
+                    @Override
+                    public void close() throws IOException {
+                        zipIn.closeEntry();
+                    }
+                });
+            } else {
+                System.out.println("===Directory===");
+            }
+            zipIn.closeEntry();
+            entry = zipIn.getNextEntry();
+        }
+    }
+
+    public void saveEntry(File dest, ZipEntry target, InputStream is) throws IOException {
+        try {
+            File file = new File(dest.getAbsolutePath(), target.getName());
+            file.delete();
+
+            if (target.isDirectory())
+                file.mkdirs();
+            else {
+                BufferedInputStream bis = new BufferedInputStream(is);
+                File dir = new File(file.getParent());
+                dir.mkdirs();
+                FileOutputStream fos = new FileOutputStream(file);
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                int c;
+                while ((c = bis.read()) != -1)
+                    bos.write((byte) c);
+
+                bos.close();
+                fos.close();
+            }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public String getMainClass() {
