@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import javax.swing.BorderFactory;
-import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -17,7 +16,9 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-public class LauncherLog extends JScrollPane {
+import com.fungus_soft.ui.ModernScrollPane;
+
+public class LauncherLog extends ModernScrollPane {
 
     private static final long serialVersionUID = 1L;
     private static JTextPane txt = new JTextPane();

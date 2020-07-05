@@ -8,13 +8,10 @@ import java.net.URL;
 import java.util.Locale;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 public class Utils {
 
     public static Gson gson = new Gson();
-
-    public static JsonParser parser = new JsonParser();
 
     public static void browse(String url) {
         if (!Desktop.isDesktopSupported())

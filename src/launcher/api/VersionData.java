@@ -18,6 +18,7 @@ import java.util.zip.ZipInputStream;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import launcher.Main;
 import launcher.Utils;
@@ -154,7 +155,7 @@ public class VersionData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.json = Utils.parser.parse(reader).getAsJsonObject();
+        this.json = JsonParser.parseReader(reader).getAsJsonObject();
     }
 
     @Override

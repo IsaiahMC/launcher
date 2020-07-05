@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class GameProfileManager {
 
@@ -28,7 +29,7 @@ public class GameProfileManager {
         this.file = new File(Utils.getDataFolder(), "launcher_profiles.json");
 
         // load local versions
-        JsonObject o = Utils.parser.parse(new FileReader(file)).getAsJsonObject();
+        JsonObject o = JsonParser.parseReader(new FileReader(file)).getAsJsonObject();
         JsonObject e = o.get("profiles").getAsJsonObject();
         JsonObject settings = o.has("settings") ? o.getAsJsonObject("settings") : null;
         Set<Entry<String, JsonElement>> s = e.entrySet();
@@ -48,7 +49,7 @@ public class GameProfileManager {
                         old ? obj.get("allowedReleaseTypes").getAsJsonObject().has("snapshot") : (null != settings ? settings.get("enableSnapshots").getAsBoolean() : false),
                         old ? obj.get("allowedReleaseTypes").getAsJsonObject().has("old_beta") : (null != settings ? settings.get("enableHistorical").getAsBoolean() : false),
                         old ? obj.get("allowedReleaseTypes").getAsJsonObject().has("old_alpha") : (null != settings ? settings.get("enableHistorical").getAsBoolean() : false),
-                        obj.has("lastVersionId") ? obj.get("lastVersionId").getAsString() : "1.12.2", // todo
+                        obj.has("lastVersionId") ? obj.get("lastVersionId").getAsString() : "ERROR", // todo
                         obj.has("javaDir") ? obj.get("javaDir").getAsString() : null,
                         obj.has("javaArgs") ? obj.get("javaArgs").getAsString() : null);
                 profiles.put(data.getKey(), profile);

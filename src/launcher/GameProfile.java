@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.google.gson.JsonIOException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 import launcher.api.AssetDownloader;
@@ -59,7 +60,7 @@ public class GameProfile {
             throw new ProfileNotFoundError(file.getAbsolutePath() + " does not exist!");
 
         try {
-            this.data = Utils.gson.fromJson(Utils.parser.parse(new FileReader(file)).getAsJsonObject(), GameProfileData.class);
+            this.data = Utils.gson.fromJson(JsonParser.parseReader(new FileReader(file)).getAsJsonObject(), GameProfileData.class);
         } catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
             e.printStackTrace();
         }

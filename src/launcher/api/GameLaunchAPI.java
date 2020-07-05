@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import launcher.Utils;
 
@@ -19,7 +20,7 @@ public class GameLaunchAPI {
     public static void downloadVersionData() throws IOException {
         versionData = new HashMap<>();
         InputStreamReader reader = new InputStreamReader(new URL(LAUNCHER_META).openStream());
-        JsonObject o = Utils.parser.parse(reader).getAsJsonObject();
+        JsonObject o = JsonParser.parseReader(reader).getAsJsonObject();
         JsonArray e = o.get("versions").getAsJsonArray();
         e.forEach(a -> {
             VersionData d = Utils.gson.fromJson(a, VersionData.class);
