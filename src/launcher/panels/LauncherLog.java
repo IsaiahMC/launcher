@@ -1,6 +1,9 @@
 package launcher.panels;
 
-import java.awt.Color;
+import static launcher.ui.Colors.LAUNCHER_LOG_BACKGROUND;
+import static launcher.ui.Colors.LAUNCHER_LOG_ERROR_FORGROUND;
+import static launcher.ui.Colors.LAUNCHER_LOG_TEXT_FORGROUND;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -13,8 +16,6 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
-
-import static launcher.ui.Colors.*;
 
 public class LauncherLog extends JScrollPane {
 

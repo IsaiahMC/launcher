@@ -83,7 +83,7 @@ public class BottomPanel extends JPanel {
         right.setOpaque(false);
         this.add(center(right), BorderLayout.EAST);
         this.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
-        this.setBorder(BorderFactory.createEmptyBorder(0, 5, 4, 5));
+        this.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
     }
 
     private JComponent center(JComponent p) {

@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -20,20 +19,21 @@ import jthemes.ThemeUtils;
 
 import launcher.api.GameLaunchAPI;
 import launcher.panels.BottomPanel;
-import launcher.panels.Browser;
 import launcher.panels.LauncherLog;
 import launcher.panels.LoginPanel;
+import launcher.panels.MainPanel;
 import launcher.panels.ModsPanel;
 import launcher.ui.LoginTheme;
 import launcher.ui.NormalTheme;
 import launcher.ui.BetterTabUI;
+import launcher.ui.Colors;
 
 public class Main {
 
     public static final String VERSION = "1.0";
 
     public static File DIR = new File(new File(System.getProperty("user.home")), ".openlauncher");
-    public static JFrame f;
+    public static StyledJFrame f;
 
     public static void main(String[] args) {
         LauncherLog.bind();
@@ -78,6 +78,7 @@ public class Main {
         f.setDefaultCloseOperation(3);
         f.pack();
         f.setSize(new Dimension(900, 570));
+        f.setMinimumSize(new Dimension(700,440));
         f.setLocationRelativeTo(null);
         f.setVisible(true);
     }
@@ -97,11 +98,9 @@ public class Main {
         }
 
         JPanel p = new JPanel();
-        p.getInsets().set(-1, -1, -1, -1);
         p.setLayout(new BoxLayout(p, 1));
         JTabbedPane tabs = new JTabbedPane();
 
-        System.out.println(tabs.getUI().getClass().getName());
         tabs.setUI(new BetterTabUI());
         tabs.setBorder(null);
         Insets insets = UIManager.getInsets("TabbedPane.contentBorderInsets");
@@ -112,15 +111,15 @@ public class Main {
         tabs.setBackground(new Color(50,50,50));
         //tabs.setForeground(Color.GREEN);
 
-        //tabs.add("Update Log", new MainPanel());
-        tabs.add("Update Log", Browser.get());
+        tabs.add("Update Log", new MainPanel());
+        //tabs.add("Update Log", Browser.get());
         tabs.add("Launcher Log", new LauncherLog());
         tabs.add("Mods", new ModsPanel());
         tabs.setBackgroundAt(0, Color.GREEN);
         p.add(tabs);
         p.add(new BottomPanel());
+        p.setBackground(Colors.BOTTOM_PANEL_BACKGROUND);
         f.setContentPane(p);
-        f.getInsets().set(-1, -1, -1, -1);
         f.validate();
     }
 
